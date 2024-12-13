@@ -3,7 +3,7 @@ import { handlers } from '@/mocks/handlers';
 import '@testing-library/jest-dom';
 import { setupServer } from 'msw/node';
 
-const server = setupServer(...handlers);
+export const server = setupServer(...handlers);
 
 beforeAll(() => {
   // Enable the mocking in tests.

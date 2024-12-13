@@ -1,8 +1,9 @@
+import { Todo } from '@/interfaces/todo';
 import { fetcher } from '@/libs/fetcher';
 
 class TodoService {
   async getTodos() {
-    return fetcher('/todos2', {
+    return fetcher<Todo[]>('/todos2', {
       method: 'GET',
     });
   }
