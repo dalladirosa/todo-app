@@ -21,7 +21,8 @@ export async function fetcher<T>(
   url: string,
   options: FetcherOptions = {},
 ): Promise<T> {
-  const { baseURL = '/api', ...fetchOptions } = options;
+  const { baseURL = process.env.API_BASE_URL, ...fetchOptions } = options;
+
   const fullUrl = `${baseURL}${url.startsWith('/') ? url : `/${url}`}`;
 
   try {
