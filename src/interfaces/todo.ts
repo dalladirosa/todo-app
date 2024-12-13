@@ -5,3 +5,5 @@ export interface Todo {
   createdAt: string;
   completed: boolean;
 }
+
+export type TodoFilter = 'All' | 'Personal' | 'Work';
