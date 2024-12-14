@@ -44,7 +44,7 @@ export async function fetcher<T>(
         const data = await response.json();
         error.message = data.message || error.message;
       } catch {
-        // If parsing JSON fails, use default error message
+        console.error('Failed to parse JSON response', response);
       }
 
       throw new APIError(error.message, error.status);

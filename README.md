@@ -2,6 +2,21 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+Before running the application, create a `.env` file in the root directory with the following variables:
+
+```env
+X_API_KEY=your_api_key_here
+API_BASE_URL=your_api_base_url_here
+```
+
+Required environment variables:
+- `X_API_KEY`: API key for authentication
+- `API_BASE_URL`: Base URL for the API endpoints
+
+### Development Server
+
 First, run the development server:
 
 ```bash
