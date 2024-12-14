@@ -5,6 +5,10 @@ class TodoService {
   async getTodos() {
     return fetcher<Todo[]>('/todos2', {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.X_API_KEY!,
+      },
     });
   }
 }

@@ -71,9 +71,7 @@ describe('TodoList', () => {
 
     const personalFilter = await findByTestId('todo-list-filter-personal');
 
-    await act(async () => {
-      await userEvent.click(personalFilter);
-    });
+    await userEvent.click(personalFilter);
 
     expect(await findByTestId(`todo-item-${todos[1].id}`)).toBeInTheDocument();
     expect(queryByTestId(`todo-item-${todos[0].id}`)).not.toBeInTheDocument();
@@ -90,9 +88,113 @@ describe('TodoList', () => {
 
     const workFilter = await findByTestId('todo-list-filter-work');
 
+    await userEvent.click(workFilter);
+
+    expect(await findByTestId(`todo-item-${todos[0].id}`)).toBeInTheDocument();
+    expect(queryByTestId(`todo-item-${todos[1].id}`)).not.toBeInTheDocument();
+  });
+
+  it('should maintain completed status when filtering by personal category', async () => {
+    let rendered;
+
     await act(async () => {
-      await userEvent.click(workFilter);
+      rendered = render(<TodoList todosPromise={Promise.resolve(todos)} />);
     });
+
+    const { findByTestId } = rendered!;
+
+    // First mark the personal todo as completed
+    const personalTodoCheckbox = await findByTestId(
+      `todo-checkbox-${todos[1].id}`,
+    );
+    await userEvent.click(personalTodoCheckbox);
+
+    // Then filter by personal category
+    const personalFilter = await findByTestId('todo-list-filter-personal');
+    await userEvent.click(personalFilter);
+
+    // Verify personal todo is still visible and completed
+    const personalTodo = await findByTestId(`todo-item-${todos[1].id}`);
+    expect(personalTodo).toBeInTheDocument();
+    expect(personalTodoCheckbox).toBeChecked();
+  });
+
+  it('should maintain completed status when filtering by work category', async () => {
+    let rendered;
+
+    await act(async () => {
+      rendered = render(<TodoList todosPromise={Promise.resolve(todos)} />);
+    });
+
+    const { findByTestId } = rendered!;
+
+    // First mark the work todo as completed
+    const workTodoCheckbox = await findByTestId(`todo-checkbox-${todos[0].id}`);
+    await userEvent.click(workTodoCheckbox);
+
+    // Then filter by personal category
+    const workFilter = await findByTestId('todo-list-filter-work');
+    await userEvent.click(workFilter);
+
+    // Verify work todo is still visible and completed
+    const workTodo = await findByTestId(`todo-item-${todos[0].id}`);
+    expect(workTodo).toBeInTheDocument();
+    expect(workTodoCheckbox).toBeChecked();
+  });
+
+  it('should maintain completed status when filtering by all category', async () => {
+    let rendered;
+
+    await act(async () => {
+      rendered = render(<TodoList todosPromise={Promise.resolve(todos)} />);
+    });
+
+    const { findByTestId } = rendered!;
+
+    // First mark all todos as completed
+    const firstTodoCheckbox = await findByTestId(
+      `todo-checkbox-${todos[0].id}`,
+    );
+    const secondTodoCheckbox = await findByTestId(
+      `todo-checkbox-${todos[1].id}`,
+    );
+    await userEvent.click(firstTodoCheckbox);
+    await userEvent.click(secondTodoCheckbox);
+
+    // Then filter by personal category
+    const personalFilter = await findByTestId('todo-list-filter-personal');
+    await userEvent.click(personalFilter);
+
+    // Verify personal todo is still visible and completed
+    const personalTodo = await findByTestId(`todo-item-${todos[1].id}`);
+    expect(personalTodo).toBeInTheDocument();
+    expect(secondTodoCheckbox).toBeChecked();
+
+    // Then filter by all category
+    const allFilter = await findByTestId('todo-list-filter-all');
+    await userEvent.click(allFilter);
+
+    // Verify all todos are still visible and completed
+    const firstTodo = await findByTestId(`todo-item-${todos[0].id}`);
+    const secondTodo = await findByTestId(`todo-item-${todos[1].id}`);
+    expect(firstTodo).toBeInTheDocument();
+    expect(secondTodo).toBeInTheDocument();
+    expect(firstTodoCheckbox).toBeChecked();
+    expect(secondTodoCheckbox).toBeChecked();
+  });
+
+  it('should filter todos by work category when work filter is clicked', async () => {
+    let rendered;
+
+    await act(async () => {
+      rendered = render(<TodoList todosPromise={Promise.resolve(todos)} />);
+    });
+
+    const { findByTestId, queryByTestId } = rendered!;
+
+    const workFilter = await findByTestId('todo-list-filter-work');
+
+    await userEvent.click(workFilter);
 
     expect(await findByTestId(`todo-item-${todos[0].id}`)).toBeInTheDocument();
     expect(queryByTestId(`todo-item-${todos[1].id}`)).not.toBeInTheDocument();
@@ -123,12 +225,10 @@ describe('TodoList', () => {
     );
 
     const firstTodoCheckbox = await findByTestId(
-      `todo-item-checkbox-${todos[1].id}`,
+      `todo-checkbox-${todos[1].id}`,
     );
 
-    await act(async () => {
-      await userEvent.click(firstTodoCheckbox);
-    });
+    await userEvent.click(firstTodoCheckbox);
 
     todoItems = await findAllByTestId(/^todo-item-/);
 
