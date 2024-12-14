@@ -15,10 +15,9 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.62.7",
-    "@tanstack/react-query-devtools": "^5.62.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -28,7 +27,6 @@
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
     "@eslint/eslintrc": "^3.2.0",
-    "@tanstack/eslint-plugin-query": "^5.62.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",

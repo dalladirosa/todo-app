@@ -1,30 +1,59 @@
 import { Todo } from '@/interfaces/todo';
+import { cn } from '@/utils';
 
-type TodoItemProps = {
+import { Dispatch, SetStateAction } from 'react';
+
+import dayjs from 'dayjs';
+
+interface TodoItemProps {
   todo: Todo;
-};
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
+}
 
 function TodoItem(props: TodoItemProps) {
-  const { todo } = props;
+  const { todo, setTodos } = props;
 
   if (!todo) {
     return null;
   }
-  console.log(`todo-item-${todo.id}`);
+
+  const handleCheckboxChange = () => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === props.todo.id
+          ? { ...todo, completed: !todo.completed }
+          : todo,
+      ),
+    );
+  };
 
   return (
-    <div className="flex flex-row gap-4" data-testid={`todo-item-${todo.id}`}>
+    <div
+      className="flex w-full flex-row items-center gap-4 bg-white p-5"
+      data-testid={`todo-item-${todo.id}`}
+    >
       <input
+        checked={todo.completed}
+        onChange={handleCheckboxChange}
+        className="p-2.5"
         type="checkbox"
-        name="todo-item"
-        id="todo-item"
-        data-testid={`todo-item-checkbox-${todo.id}`}
+        name="todo-checkbox"
+        data-testid={`todo-checkbox-${todo.id}`}
       />
-      <div className="flex flex-col gap-2">
-        <p data-testid={`todo-item-title-${todo.id}`}>{todo.task}</p>
-        <p>{todo.category}</p>
+      <div className="ml-4 flex flex-col gap-2">
+        <p
+          data-testid="todo-title"
+          className={cn('text-lg font-bold text-black', {
+            'line-through opacity-50': todo.completed,
+          })}
+        >
+          {todo.task}
+        </p>
+        <p className="text-xs text-secondary-black">{todo.category}</p>
       </div>
-      <p>{todo.createdAt}</p>
+      <p className="ml-auto text-xs text-secondary-black">
+        {dayjs(todo.createdAt).format('YYYY/MM/D HH:mm')}
+      </p>
     </div>
   );
 }

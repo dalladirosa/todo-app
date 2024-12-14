@@ -10,7 +10,15 @@ export default {
     extend: {
       colors: {
         background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        black: 'var(--black)',
+        'secondary-black': 'var(--secondary-black)',
+        primary: 'var(--primary)',
+        secondary: 'var(--secondary)',
+        brown: 'var(--brown)',
+        green: 'var(--green)',
+        'light-green': 'var(--light-green)',
+        'dark-brown': 'var(--dark-brown)',
+        gray: 'var(--gray)',
       },
     },
   },

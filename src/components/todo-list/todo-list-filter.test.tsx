@@ -4,8 +4,10 @@ import userEvent from '@testing-library/user-event';
 import TodoListFilter from './todo-list-filter';
 
 describe('TodoListFilter', () => {
+  const mockSetFilter = jest.fn();
+
   it('should render the filter options', () => {
-    render(<TodoListFilter />);
+    render(<TodoListFilter filter="All" setFilter={mockSetFilter} />);
 
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.getByText('Personal')).toBeInTheDocument();
@@ -13,44 +15,51 @@ describe('TodoListFilter', () => {
   });
 
   it('should render the filter options with the correct data-testid and default filter option', () => {
-    render(<TodoListFilter />);
+    render(<TodoListFilter filter="All" setFilter={mockSetFilter} />);
 
     const allFilter = screen.getByTestId('todo-list-filter-all');
     const personalFilter = screen.getByTestId('todo-list-filter-personal');
     const workFilter = screen.getByTestId('todo-list-filter-work');
 
     expect(allFilter).toBeInTheDocument();
-    expect(allFilter).toHaveClass('bg-primary');
-    expect(personalFilter).not.toHaveClass('bg-primary');
-    expect(workFilter).not.toHaveClass('bg-primary');
+    expect(allFilter.classList.contains('bg-light-green')).toBe(true);
+    expect(personalFilter.classList.contains('bg-brown')).toBe(true);
+    expect(workFilter.classList.contains('bg-brown')).toBe(true);
   });
 
-  it('should allow changing the selected filter option', () => {
-    render(<TodoListFilter />);
+  it('should allow changing the selected filter option', async () => {
+    const { rerender } = render(
+      <TodoListFilter filter="All" setFilter={mockSetFilter} />,
+    );
 
     const allFilter = screen.getByTestId('todo-list-filter-all');
     const personalFilter = screen.getByTestId('todo-list-filter-personal');
     const workFilter = screen.getByTestId('todo-list-filter-work');
 
     // Initially "All" should be selected
-    expect(allFilter).toHaveClass('bg-primary');
-    expect(personalFilter).not.toHaveClass('bg-primary');
-    expect(workFilter).not.toHaveClass('bg-primary');
+    expect(allFilter).toBeInTheDocument();
+    expect(allFilter.classList.contains('bg-light-green')).toBe(true);
+    expect(personalFilter.classList.contains('bg-brown')).toBe(true);
+    expect(workFilter.classList.contains('bg-brown')).toBe(true);
 
     // Click Personal filter
-    userEvent.click(personalFilter);
+    await userEvent.click(personalFilter);
+
+    rerender(<TodoListFilter filter="Personal" setFilter={mockSetFilter} />);
 
     // Personal should now be selected
-    expect(allFilter).not.toHaveClass('bg-primary');
-    expect(personalFilter).toHaveClass('bg-primary');
-    expect(workFilter).not.toHaveClass('bg-primary');
+    expect(allFilter.classList.contains('bg-brown')).toBe(true);
+    expect(personalFilter.classList.contains('bg-light-green')).toBe(true);
+    expect(workFilter.classList.contains('bg-brown')).toBe(true);
 
     // Click Work filter
-    userEvent.click(workFilter);
+    await userEvent.click(workFilter);
+
+    rerender(<TodoListFilter filter="Work" setFilter={mockSetFilter} />);
 
     // Work should now be selected
-    expect(allFilter).not.toHaveClass('bg-primary');
-    expect(personalFilter).not.toHaveClass('bg-primary');
-    expect(workFilter).toHaveClass('bg-primary');
+    expect(allFilter.classList.contains('bg-brown')).toBe(true);
+    expect(personalFilter.classList.contains('bg-brown')).toBe(true);
+    expect(workFilter.classList.contains('bg-light-green')).toBe(true);
   });
 });
