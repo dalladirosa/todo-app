@@ -5,8 +5,8 @@ export default function Home() {
   const todosPromise = todoService.getTodos();
 
   return (
-    <div className="grid min-h-screen items-center justify-items-center gap-16 font-[family-name:var(--font-geist-sans)]">
-      <main className="container flex flex-col items-center px-8 py-9 lg:max-w-screen-md lg:px-0">
+    <div className="grid min-h-screen justify-items-center gap-16 font-[family-name:var(--font-geist-sans)]">
+      <main className="container flex flex-col px-8 py-9 lg:max-w-screen-md lg:px-0">
         <TodoList todosPromise={todosPromise} />
       </main>
     </div>
