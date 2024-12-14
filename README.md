@@ -12,6 +12,7 @@ API_BASE_URL=your_api_base_url_here
 ```
 
 Required environment variables:
+
 - `X_API_KEY`: API key for authentication
 - `API_BASE_URL`: Base URL for the API endpoints
 
